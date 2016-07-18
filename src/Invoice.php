@@ -249,11 +249,16 @@ class Invoice
      * Create an invoice download response.
      *
      * @param  array   $data
+     * @param  string  $storagePath
+     * @param  string  $filename
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function download(array $data)
+    public function download(array $data, $storagePath = null, $filename = null)
     {
-        $filename = $data['product'].'_'.$this->date()->month.'_'.$this->date()->year.'.pdf';
+        if (is_null($filename)) {
+            $filename = $data['product'].'_'.$this->date()->month.'_'.$this->date()->year;
+        }
+        $filename = $filename.'.pdf';
 
         return new Response($this->pdf($data), 200, [
             'Content-Description' => 'File Transfer',
